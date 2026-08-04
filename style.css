@@ -1140,23 +1140,28 @@ object-fit: cover;
         .edu-table td:nth-child(1),
         .edu-table td:nth-child(2) {
             text-align: left;
+            width: 16%
         }
 
         .edu-table td:nth-child(3) {
-            text-align: left;
+            width: 35%;
             vertical-align: middle;
         }
 
         .edu-table td:nth-child(4),
         .edu-table td:nth-child(5) {
             text-align: center;
+            width: 10%
         }
 
-        .edu-table td:nth-child(1) { width: 16%; }
-        .edu-table td:nth-child(2) { width: 16%; }
-        .edu-table td:nth-child(3) { width: 48%; }
-        .edu-table td:nth-child(4) { width: 10%; }
-        .edu-table td:nth-child(5) { width: 10%; }
+        .edu-table td:nth-child(1) { width: 15%; }
+        .edu-table td:nth-child(2) { width: 20%; }
+        .edu-table td:nth-child(3) { 
+            width: 35%; 
+            vertical-align: top;
+        }
+        .edu-table td:nth-child(4) { width: 15%; }
+        .edu-table td:nth-child(5) { width: 15%; }
 
         .edu-table th {
             background-color: var(--primary-light);
