@@ -5,97 +5,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Resume Builder</title>
+    <title>IIHMR CV Builder — Professional Resume Builder</title>
+    <meta name="description" content="Build a professional, programme-specific resume with IIHMR's official CV Builder. Tailored for MBA Healthcare Analytics, Hospital & Health Management, Pharma Management, Development Management, and Public Health graduates.">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.2.1/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div id="welcome-screen">
-        <div class="welcome-card">
-            <h1>Select Your Programme</h1>
-            <p style="color: #666; margin-bottom: 20px;">Choose your discipline to personalize your resume theme.</p>
-            <button class="prog-btn hc-analytics" onclick="selectProgramme('analytics')">MBA Healthcare
-                Analytics</button>
-            <button class="prog-btn hhm" onclick="selectProgramme('hhm')">MBA Hospital and Health Management</button>
-            <button class="prog-btn pharma" onclick="selectProgramme('pharma')">MBA Pharmaceutical Management</button>
-            <button class="prog-btn dev" onclick="selectProgramme('dev')">MBA Development Management</button>
-            <button class="prog-btn mph" onclick="selectProgramme('mph')">Master of Public Health</button>
+    <!-- ====== HOMEPAGE / LANDING SCREEN ====== -->
+    <div id="homepage-screen">
+
+        <!-- Animated top accent strip (burgundy → gold → burgundy) -->
+        <div class="hp-top-strip"></div>
+
+        <!-- Subtle background blobs -->
+        <div class="hp-bg-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+        </div>
+
+        <!-- Navigation Bar (white, clean — mirrors iihmr.edu.in) -->
+        <nav class="hp-nav">
+            <div class="hp-nav-inner">
+                <div class="hp-logo-group">
+                    <img src="IIHMR-700x500-1.jpg.svg" alt="IIHMR Logo" class="hp-logo-img" onerror="this.style.display='none'">
+                    <div class="hp-brand-text">
+                        <span class="hp-brand-name">IIHMR University</span>
+                        <span class="hp-brand-sub">Jaipur &nbsp;|&nbsp; Est. 1984</span>
+                    </div>
+                </div>
+                <div class="hp-nav-badge">CV Builder</div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hp-hero">
+            <div class="hp-hero-content">
+                <div class="hp-pill">&#127891; Official IIHMR Resume Tool</div>
+                <h1 class="hp-hero-title">
+                    Build Your <span class="hp-highlight">IIHMR</span><br>Career Resume
+                </h1>
+                <p class="hp-hero-subtitle">
+                    The official CV builder for IIHMR University students.
+                    Choose your programme, fill your details, and download a
+                    beautifully formatted, recruiter-ready PDF in minutes.
+                </p>
+                <div class="hp-hero-actions">
+                    <button class="hp-cta-btn" onclick="showProgrammeSelector()" id="getStartedBtn">
+                        <span>Build My Resume</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                    <div class="hp-hero-note">&#10004; Free &nbsp;&middot;&nbsp; No sign-up &nbsp;&middot;&nbsp; Instant PDF &nbsp;&middot;&nbsp; Auto-saved locally</div>
+                </div>
+            </div>
+            <div class="hp-hero-visual">
+                <div class="hp-cv-mockup">
+                    <div class="hp-mockup-header">
+                        <div class="hp-mockup-logo-bar"></div>
+                        <div class="hp-mockup-title-bar"></div>
+                    </div>
+                    <div class="hp-mockup-body">
+                        <div class="hp-mockup-sidebar">
+                            <div class="hp-mockup-avatar"></div>
+                            <div class="hp-mockup-line short"></div>
+                            <div class="hp-mockup-line medium"></div>
+                            <div class="hp-mockup-line short"></div>
+                            <div class="hp-mockup-line medium"></div>
+                            <div class="hp-mockup-line short"></div>
+                        </div>
+                        <div class="hp-mockup-main">
+                            <div class="hp-mockup-name"></div>
+                            <div class="hp-mockup-line long"></div>
+                            <div class="hp-mockup-line medium"></div>
+                            <div class="hp-mockup-section-bar"></div>
+                            <div class="hp-mockup-line long"></div>
+                            <div class="hp-mockup-line medium"></div>
+                            <div class="hp-mockup-line short"></div>
+                            <div class="hp-mockup-section-bar"></div>
+                            <div class="hp-mockup-line long"></div>
+                            <div class="hp-mockup-line medium"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-float-badge badge-top">&#127973; Healthcare Focus</div>
+                <div class="hp-float-badge badge-bottom">&#128196; PDF Export</div>
+            </div>
+        </section>
+
+        <!-- Stats Strip (inspired by IIHMR's "35+ Training Programs" section) -->
+        <div class="hp-stats">
+            <div class="hp-stats-inner">
+                <div>
+                    <div class="hp-stat-num">5</div>
+                    <div class="hp-stat-label">Programme Themes</div>
+                </div>
+                <div>
+                    <div class="hp-stat-num">1-Click</div>
+                    <div class="hp-stat-label">PDF Export</div>
+                </div>
+                <div>
+                    <div class="hp-stat-num">A4</div>
+                    <div class="hp-stat-label">Auto-fit Layout</div>
+                </div>
+                <div>
+                    <div class="hp-stat-num">100%</div>
+                    <div class="hp-stat-label">Free &amp; Private</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section (cream background — mirrors IIHMR content sections) -->
+        <section class="hp-features">
+            <div class="hp-features-inner">
+                <p class="hp-features-label">Why IIHMR CV Builder?</p>
+                <h2 class="hp-features-title">Built for <span>IIHMR Students</span></h2>
+                <div class="hp-features-grid">
+                    <div class="hp-feature-card">
+                        <span class="hp-feature-icon">&#127912;</span>
+                        <h3>Programme Themes</h3>
+                        <p>5 colour-coded themes — Healthcare Analytics, Hospital Management, Pharmaceutical Management, Development &amp; Public Health.</p>
+                    </div>
+                    <div class="hp-feature-card">
+                        <span class="hp-feature-icon">&#9889;</span>
+                        <h3>Smart Auto-fit</h3>
+                        <p>Intelligent layout engine fits all your content onto a single A4 page automatically.</p>
+                    </div>
+                    <div class="hp-feature-card">
+                        <span class="hp-feature-icon">&#128190;</span>
+                        <h3>Browser Auto-Save</h3>
+                        <p>Your resume data is saved in your browser. Resume exactly where you left off anytime.</p>
+                    </div>
+                    <div class="hp-feature-card">
+                        <span class="hp-feature-icon">&#128424;&#65039;</span>
+                        <h3>One-Click PDF</h3>
+                        <p>Download a print-ready, high-resolution PDF in seconds — perfectly formatted for recruiters.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Programme Badges -->
+        <section class="hp-programmes">
+            <p class="hp-programmes-label">Supported Programmes</p>
+            <h2 class="hp-programmes-title">All IIHMR Disciplines Covered</h2>
+            <div class="hp-prog-badges">
+                <span class="hp-prog-badge" style="--badge-color: #248BB4;">MBA Healthcare Analytics</span>
+                <span class="hp-prog-badge" style="--badge-color: #AB79C7;">MBA Hospital &amp; Health Management</span>
+                <span class="hp-prog-badge" style="--badge-color: #CC9901;">MBA Pharmaceutical Management</span>
+                <span class="hp-prog-badge" style="--badge-color: #d2691e;">MBA Development Management</span>
+                <span class="hp-prog-badge" style="--badge-color: #008080;">Master of Public Health</span>
+            </div>
+        </section>
+
+        <!-- Footer (dark burgundy — exact match to iihmr.edu.in footer) -->
+        <footer class="hp-footer">
+            <div class="hp-footer-inner">
+                <p>&copy; 2026 IIHMR University, Jaipur &nbsp;&mdash;&nbsp; CV Builder v2.0 &nbsp;&mdash;&nbsp; Built exclusively for IIHMR Students<span>&nbsp;&mdash;&nbsp;By : Ravi Kr. Thakur (SPC HA)</span></p>
+                <p><a href="https://iihmr.edu.in" target="_blank">iihmr.edu.in</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ====== PROGRAMME SELECTION SCREEN ====== -->
+    <div id="welcome-screen" style="display:none;">
+        <div class="ws-left-pane">
+            <button class="ws-back-btn" onclick="showHomepage()" title="Back to Home">← Back to Home</button>
+            <div class="ws-brand-content">
+                <img src="IIHMR-700x500-1.jpg.svg" alt="IIHMR Logo" class="ws-logo" onerror="this.style.display='none'">
+                <div class="ws-inst-name">IIHMR University</div>
+                <div class="ws-inst-sub">Jaipur</div>
+                <div class="ws-tagline">Empowering Future Leaders in Healthcare</div>
+            </div>
+        </div>
+        <div class="ws-right-pane">
+            <div class="ws-right-content">
+                <h1>Select Your Programme</h1>
+                <p class="ws-subtitle">Choose your discipline to personalize your resume theme.</p>
+                <div class="ws-prog-grid">
+                    <div class="ws-prog-card hc-analytics" onclick="selectProgramme('analytics')">
+                        <h3>MBA Healthcare Analytics</h3>
+                    </div>
+                    <div class="ws-prog-card hhm" onclick="selectProgramme('hhm')">
+                        <h3>MBA Hospital &amp; Health Management</h3>
+                    </div>
+                    <div class="ws-prog-card pharma" onclick="selectProgramme('pharma')">
+                        <h3>MBA Pharmaceutical Management</h3>
+                    </div>
+                    <div class="ws-prog-card dev" onclick="selectProgramme('dev')">
+                        <h3>MBA Development Management</h3>
+                    </div>
+                    <div class="ws-prog-card mph" onclick="selectProgramme('mph')">
+                        <h3>Master of Public Health</h3>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="app-container" id="form-view">
-        <button type="button" class="btn-secondary" onclick="goBackToWelcome()" style="margin-bottom: 20px;">← Change Programme</button>
-        <h1 style="text-align: center;">Resume Builder</h1>
+    <div class="app-container" id="form-view" style="display:none;">
+        <nav class="hp-nav" style="position: relative; box-shadow: none;">
+            <div class="hp-nav-inner">
+                <div class="hp-logo-group">
+                    <img src="IIHMR-700x500-1.jpg.svg" alt="IIHMR Logo" class="hp-logo-img" onerror="this.style.display='none'">
+                    <div class="hp-brand-text">
+                        <span class="hp-brand-name">IIHMR University</span>
+                        <span class="hp-brand-sub">Jaipur &nbsp;|&nbsp; Est. 1984</span>
+                    </div>
+                </div>
+                <button type="button" class="nav-back-btn" onclick="goBackToWelcome()">← Change Programme</button>
+            </div>
+        </nav>
+        
+        <div class="form-hero">
+            <div class="form-hero-content">
+                <h1 class="form-hero-title" style="color:white">Resume Builder</h1>
+                <p class="form-hero-subtitle">Fill in your details to instantly generate a professional CV.</p>
+            </div>
+        </div>
 
+        <div class="form-wrapper">
         <form id="cvForm">
             <div class="form-section">
                 <h2>1. Personal Details</h2>
-                <div style="display:flex; gap: 15px;">
-                    <div class="form-group" style="flex:2;">
-                        <label>Full Name</label>
-                        <input type="text" id="FullName" required>
-                        <label style="margin-top: 15px;">Profile Summary</label>
-                        <textarea id="ObjectiveStatement" rows="5"></textarea>
-                    </div>
-                    <div class="form-group"
-                        style="flex:1; background: #fff; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
-                        <label>Profile Picture</label>
-                        <small style="color:#666; display:block; margin-bottom:5px;">Upload Local File (Max 2MB)</small>
-                        <input type="file" id="ProfilePicUpload" accept="image/*" style="margin-bottom: 10px;">
-                        <img id="profile-preview" src="" alt="Profile Preview">
-                    </div>
+                
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="FullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Profile Summary</label>
+                    <textarea id="ObjectiveStatement" rows="5"></textarea>
                 </div>
 
-                <div style="display:flex; gap: 15px;">
-                    <div class="form-group" style="flex:1;"><label>Location</label><input type="text" id="Location">
-                    </div>
-                    <div class="form-group" style="flex:1;"><label>Phone</label><input type="text" id="PhoneNumber">
-                    </div>
-                    <div class="form-group" style="flex:1;"><label>Email Address</label><input type="email"
-                            id="EmailAddress"></div>
+                <div class="form-group" style="background: #fff; padding: 15px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px;">
+                    <label>Profile Picture</label>
+                    <small style="color:#666; display:block; margin-bottom:5px;">Upload an image — a crop tool will appear so you can frame it perfectly.</small>
+                    <input type="file" id="ProfilePicUpload" accept="image/*" style="margin-bottom: 10px;">
+                    <img id="profile-preview" src="" alt="Profile Preview">
                 </div>
-                <div style="display:flex; gap: 15px;">
-                    <div class="form-group" style="flex:1;"><label>LinkedIn Display Name</label><input type="text"
-                            id="LinkedInName"></div>
-                    <div class="form-group" style="flex:1;"><label>LinkedIn URL</label><input type="text"
-                            id="LinkedInURL"></div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="Location">
                 </div>
-                <div style="display:flex; gap: 15px;">
-                    <div class="form-group" style="flex:1;"><label>Date of Birth</label><input type="text" id="DOB">
-                    </div>
-                    <div class="form-group" style="flex:1;"><label>Languages</label><input type="text" id="Languages">
-                    </div>
+                
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="PhoneNumber">
+                </div>
+                
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="EmailAddress">
+                </div>
+
+                <div class="form-group">
+                    <label>LinkedIn Display Name</label>
+                    <input type="text" id="LinkedInName">
+                </div>
+                
+                <div class="form-group">
+                    <label>LinkedIn URL</label>
+                    <input type="text" id="LinkedInURL">
+                </div>
+                
+                <div class="form-group">
+                    <label id="ExtraLinkLabel">GitHub / Publications Link</label>
+                    <input type="text" id="ExtraLinkURL">
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="text" id="DOB">
+                </div>
+                
+                <div class="form-group">
+                    <label>Languages</label>
+                    <input type="text" id="Languages">
                 </div>
             </div>
 
-            <div style="display:flex; gap:15px;">
-                <div class="form-section" style="flex:1;">
-                    <h2>2. Technical Skills</h2>
-                    <div id="tech-skills-container"></div>
-                    <button type="button" class="btn-add" onclick="addTechSkill()">+ Add Skill</button>
-                </div>
-                <div class="form-section" style="flex:1;">
-                    <h2>3. Interpersonal Skills</h2>
-                    <div id="inter-skills-container"></div>
-                    <button type="button" class="btn-add" onclick="addInterSkill()">+ Add Skill</button>
-                </div>
+            <div class="form-section">
+                <h2>2. Technical Skills</h2>
+                <div id="tech-skills-container"></div>
+                <button type="button" class="btn-add" onclick="addTechSkill()">+ Add Skill</button>
             </div>
 
-            <div style="display:flex; gap:15px;">
-                <div class="form-section" style="flex:1;">
-                    <h2>4. Strengths</h2>
-                    <div id="strengths-container"></div>
-                    <button type="button" class="btn-add" onclick="addStrength()">+ Add Strength</button>
-                </div>
-                <div class="form-section" style="flex:1;">
-                    <h2>5. Certifications / Participation</h2>
-                    <div id="certs-container"></div>
-                    <button type="button" class="btn-add" onclick="addCert()">+ Add Cert</button>
-                </div>
+            <div class="form-section">
+                <h2>3. Interpersonal Skills</h2>
+                <div id="inter-skills-container"></div>
+                <button type="button" class="btn-add" onclick="addInterSkill()">+ Add Skill</button>
+            </div>
+
+            <div class="form-section">
+                <h2>4. Strengths</h2>
+                <div id="strengths-container"></div>
+                <button type="button" class="btn-add" onclick="addStrength()">+ Add Strength</button>
+            </div>
+
+            <div class="form-section">
+                <h2>5. Certifications / Participation</h2>
+                <div id="certs-container"></div>
+                <button type="button" class="btn-add" onclick="addCert()">+ Add Cert</button>
             </div>
 
             <div class="form-section">
@@ -116,44 +335,42 @@
                 <button type="button" class="btn-add" onclick="addEducation()">+ Add Education</button>
             </div>
 
-            <div style="display:flex; gap:15px;">
-                <div class="form-section" style="flex:1;">
-                    <h2>9. Achievements</h2>
-                    <div id="achievements-container"></div>
-                    <button type="button" class="btn-add" onclick="addAchievement()">+ Add Achievement</button>
-                </div>
-                <div class="form-section" style="flex:1;">
-                    <h2>10. Projects</h2>
-                    <div id="projects-container"></div>
-                    <button type="button" class="btn-add" onclick="addProject()">+ Add Project</button>
-                </div>
+            <div class="form-section">
+                <h2>9. Achievements</h2>
+                <div id="achievements-container"></div>
+                <button type="button" class="btn-add" onclick="addAchievement()">+ Add Achievement</button>
             </div>
 
-            <button type="button" class="btn-primary" onclick="generateResume()">Generate Resume 🚀</button>
+            <div class="form-section">
+                <h2>10. Projects</h2>
+                <div id="projects-container"></div>
+                <button type="button" class="btn-add" onclick="addProject()">+ Add Project</button>
+            </div>
+
+            <div class="form-actions-bottom">
+                <button type="button" class="btn-primary generate-btn" onclick="generateResume()">Generate Resume 🚀</button>
+            </div>
         </form>
+        </div>
     </div>
 
-    <div id="cv-output">
-        <div class="controls">
+    <!-- ====== CV PREVIEW SCREEN ====== -->
+    <div id="cv-output" style="display:none;">
+        <div class="cv-output-header">
             <button class="btn-secondary" onclick="editResume()">← Back to Edit</button>
-
-            <div
-                style="display:flex; flex-direction:column; align-items:center; background:#fff; padding:5px 20px; border-radius:5px; border: 1px solid #ccc;">
-                <label style="font-size:12px; margin-bottom:5px; font-weight:bold; color:#333;">Spacing vs. Text
-                    Size</label>
-                <div style="display:flex; gap: 10px; align-items:center;">
-                    <span style="font-size: 10px; color:#666;">Roomy</span>
-                    <input type="range" id="layoutSlider" min="-3" max="5" value="0" step="1"
-                        oninput="adjustLayoutDensity()">
-                    <span style="font-size: 10px; color:#666;">Compact</span>
+            <div class="slider-box">
+                <label>Spacing vs. Text Size</label>
+                <div class="slider-row">
+                    <span>Roomy</span>
+                    <input type="range" id="layoutSlider" min="-3" max="5" value="0" step="1" oninput="adjustLayoutDensity()">
+                    <span>Compact</span>
                 </div>
             </div>
-
             <button class="btn-secondary" id="downloadBtn" onclick="downloadPDF()">🖨️ Download PDF</button>
         </div>
-        <div id="render-target"></div>
-    </div>
-
+        <div class="cv-preview-scroll">
+            <div id="render-target"></div>
+        </div>
     <script type="text/template" id="cvTemplateHtml">
         <div class="cv-container">
             <header class="top-banner">
@@ -182,7 +399,7 @@
                         <h3>Interpersonal Skills</h3>
                         <ul>
                             {{#InterpersonalSkills}}
-                            <li>{{InterpersonalSkill_Name}}</li>
+                            <li>{{InterpersonalSkill_Name}} <span class="skill-detail">{{#InterpersonalSkill_Detail}}({{InterpersonalSkill_Detail}}){{/InterpersonalSkill_Detail}}</span></li>
                             {{/InterpersonalSkills}}
                         </ul>
                     </div>
@@ -193,22 +410,22 @@
                         <h3>Strength</h3>
                         <ul>
                             {{#Strengths}}
-                            <li>{{Strength_Name}} <span class="skill-detail">{{#Strength_Detail}}({{Strength_Detail}}){{/Strength_Detail}}</span></li>
+                            <li>{{Strength_Name}}</li>
                             {{/Strengths}}
                         </ul>
                     </div>
                     {{/hasStr}}
 
-                    {{#hasCert}}
+                    {{#hasAch}}
                     <div class="sidebar-section">
-                        <h3>Participation / Certification</h3>
+                        <h3>Achievements</h3>
                         <ul>
-                            {{#Certifications}}
-                            <li>{{Certification_Name}} <span class="skill-detail">{{Certification_Detail}}</span></li>
-                            {{/Certifications}}
+                            {{#Achievements}}
+                            <li>{{Achievement_Detail}}</li>
+                            {{/Achievements}}
                         </ul>
                     </div>
-                    {{/hasCert}}
+                    {{/hasAch}}
 
                     <div class="sidebar-section">
                         <h3>Other Details</h3>
@@ -227,17 +444,29 @@
                             <div>{{PhoneNumber}}</div>
                             <div class="contact-links">
                                 <span class="contact-item">
-                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAeCAYAAABTwyyaAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAiFJREFUWIXV2EFLG0EUB/D/TGipIFIaTz0LIiYfxIt4KS30IC0ieFFzEGIUpEKyKYHazaV40UtPKogB8eg38OKiB8GLaKEQERVjwd3paWUyvs3OTE02/Z+y2Tfv/WZYshAGJZlytaZ+1w3x8tOj8jULP2Qdd00w1t95kn4CEewfzc+uABI8zP9y4hwAMo67IxcwIfxOw6LCBK5ldKbobgEAGy59X2ecp4Gnu0r69CM9QghG4eQFWaf6UzD0tV0px/d3vYXcanhJGUk4kNzp686NhFONhovuFEuxkechNueu8Wfi9Mvc7/A6zhULB4DLq9tPF+VCXbepaeTDeZsvpd+87l2PW6MFpwYMLn8dfPGyp2LOpPsBZgdiBAcA/8H/cbyY27MZJkdGDxVXxlKp1GeT9cZwajDGl15lhtIbxutgv3FrOAAgEIdeYWZBBxEEfuOokHv/WFtyv4GzAdvR/wRXT+8RpfTUrTMJt13Y9BouV2tZx91W7wkhDprqnOqmjI3akE6sTlxFR92T06rOxmAM1x0Y1unUxNVRsf4df66XkG1P7We8HWi1l8kzrwVvF5rqqYuPhbcbTfXWwbeEdwpNzYjDR8I7jaZmtcKT8KTQ1Mwo/BN40mhqNoXnEOJOKhijFiaVVnjuzc98AIBf9bOPAAJ1QdKh8F5+epQDwE3jfrJeqdyohd2SJvz5yTtA+SerG9Fy5MeFR93opjDB7lXbX021PaqEU0REAAAAAElFTkSuQmCC" class="contact-icon" onerror="this.style.display='none'">
+                                    <svg class="contact-icon" style="fill: var(--primary-color);" width="14" height="14" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                                     <a href="mailto:{{EmailAddress}}">{{EmailAddress}}</a>
                                 </span>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <span class="contact-item">
-                                    <img src="data:image/png;base64,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" class="contact-icon" onerror="this.style.display='none'">
+                                    <svg class="contact-icon" style="fill: var(--primary-color);" width="14" height="14" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                                     <a href="{{LinkedInURL}}"><u>{{LinkedInDisplay_Name}}</u></a>
                                 </span>
-                                <hr class="custom-divider" style="border-top-width: 1.5px; border-top-color: var(--primary-color);">
-                                <p class="profile-summary">{{ObjectiveStatement}}</p>
+                                {{#ExtraLinkURL}}
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="contact-item">
+                                    {{#IsGitHub}}
+                                    <svg class="contact-icon" style="fill: var(--primary-color);" width="14" height="14" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    {{/IsGitHub}}
+                                    {{^IsGitHub}}
+                                    <svg class="contact-icon" style="fill: var(--primary-color);" width="14" height="14" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V5h2v3h10V5h2v16z"/></svg>
+                                    {{/IsGitHub}}
+                                    <a href="{{ExtraLinkURL}}"><u>{{ExtraLinkLabelText}}</u></a>
+                                </span>
+                                {{/ExtraLinkURL}}
                             </div>
+                            <hr class="custom-divider" style="border-top-width: 1.5px; border-top-color: var(--primary-color);">
+                            <p class="profile-summary">{{ObjectiveStatement}}</p>
                         </div>
                     </div>
 
@@ -298,16 +527,16 @@
                     </div>
                     {{/hasEdu}}
 
-                    {{#hasAch}}
+                    {{#hasCert}}
                     <div class="section">
-                        <h2 class="section-title">Achievements</h2>
+                        <h2 class="section-title">Participation / Certification</h2>
                         <ul class="job-bullets">
-                            {{#Achievements}}
-                            <li>{{Achievement_Detail}}</li>
-                            {{/Achievements}}
+                            {{#Certifications}}
+                            <li><span style="font-weight: 600;">{{Certification_Name}}</span> - {{Certification_Detail}}</li>
+                            {{/Certifications}}
                         </ul>
                     </div>
-                    {{/hasAch}}
+                    {{/hasCert}}
 
                     {{#hasProj}}
                     <div class="section">

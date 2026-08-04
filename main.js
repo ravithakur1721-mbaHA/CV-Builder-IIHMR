@@ -1,4 +1,16 @@
+        // --- HOMEPAGE NAVIGATION ---
+        function showProgrammeSelector() {
+            document.getElementById('homepage-screen').style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'flex';
+        }
+
+        function showHomepage() {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('homepage-screen').style.display = 'block';
+        }
+
         // --- DYNAMIC THEME SELECTOR ---
+
         const colorThemes = {
             "analytics": {
                 "--primary-color": "#248BB4",
@@ -9,19 +21,19 @@
                 "--banner-text": "#d4eaf3"
             },
             "hhm": {
-                "--primary-color": "#2E8B57",
-                "--primary-dark": "#1c5435",
-                "--primary-light": "#E0F2E9",
-                "--primary-accent": "#3CB371",
-                "--primary-deep": "#246B43",
-                "--banner-text": "#dcf0e5"
+                "--primary-color": "#AB79C7",
+                "--primary-dark": "#AB79C7",
+                "--primary-light": "#DFCEE8",
+                "--primary-accent": "#AB79C7",
+                "--primary-deep": "#AB79C7",
+                "--banner-text": "#eed5e2"
             },
             "pharma": {
-                "--primary-color": "#8b3a62",
-                "--primary-dark": "#5e2642",
-                "--primary-light": "#f5e6ee",
-                "--primary-accent": "#a8547d",
-                "--primary-deep": "#732c50",
+                "--primary-color": "#CC9901",
+                "--primary-dark": "#CC9901",
+                "--primary-light": "#FEFFCC",
+                "--primary-accent": "#CC9901",
+                "--primary-deep": "#CC9901",
                 "--banner-text": "#eed5e2"
             },
             "dev": {
@@ -64,6 +76,12 @@
             // Save the selected programme text
             selectedProgrammeText = programmeTitles[themeKey];
 
+            if (themeKey === 'analytics') {
+                document.getElementById('ExtraLinkLabel').innerText = "GitHub Link";
+            } else {
+                document.getElementById('ExtraLinkLabel').innerText = "Publications / Thesis Link";
+            }
+
             // Hide the welcome screen and show the app
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('form-view').style.display = 'block';
@@ -80,24 +98,48 @@
         function addTechSkill(name = "", detail = "") {
             const container = document.getElementById('tech-skills-container');
             const div = document.createElement('div'); div.className = 'dynamic-item tech-item';
+            let det = detail.toLowerCase();
+            let opt1 = det==='' ? 'selected' : '';
+            let opt2 = (det==='beginner' || det==='basic') ? 'selected' : '';
+            let opt3 = (det==='competent' || det==='intermediate') ? 'selected' : '';
+            let opt4 = (det==='proficient' || det==='advance' || det==='advanced' || det==='dashboard') ? 'selected' : '';
+            let opt5 = det==='expert' ? 'selected' : '';
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
                 '<input type="text" class="t-name" placeholder="Skill (e.g. Python)" value="' + name + '" style="margin-bottom:5px;">' +
-                '<input type="text" class="t-detail" placeholder="Detail (Optional)" value="' + detail + '">';
+                '<select class="t-detail">' +
+                '<option value="" ' + opt1 + '>Select Level (Optional)</option>' +
+                '<option value="Beginner" ' + opt2 + '>Beginner</option>' +
+                '<option value="Competent" ' + opt3 + '>Competent</option>' +
+                '<option value="Proficient" ' + opt4 + '>Proficient</option>' +
+                '<option value="Expert" ' + opt5 + '>Expert</option>' +
+                '</select>';
             container.appendChild(div);
         }
-        function addInterSkill(name = "") {
+        function addInterSkill(name = "", detail = "") {
             const container = document.getElementById('inter-skills-container');
             const div = document.createElement('div'); div.className = 'dynamic-item int-item';
+            let det = detail.toLowerCase();
+            let opt1 = det==='' ? 'selected' : '';
+            let opt2 = (det==='beginner' || det==='basic') ? 'selected' : '';
+            let opt3 = (det==='competent' || det==='intermediate') ? 'selected' : '';
+            let opt4 = (det==='proficient' || det==='advance' || det==='advanced') ? 'selected' : '';
+            let opt5 = det==='expert' ? 'selected' : '';
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
-                '<input type="text" class="i-name" placeholder="Skill" value="' + name + '">';
+                '<input type="text" class="i-name" placeholder="Skill" value="' + name + '" style="margin-bottom:5px;">' +
+                '<select class="i-detail">' +
+                '<option value="" ' + opt1 + '>Select Level (Optional)</option>' +
+                '<option value="Beginner" ' + opt2 + '>Beginner</option>' +
+                '<option value="Competent" ' + opt3 + '>Competent</option>' +
+                '<option value="Proficient" ' + opt4 + '>Proficient</option>' +
+                '<option value="Expert" ' + opt5 + '>Expert</option>' +
+                '</select>';
             container.appendChild(div);
         }
-        function addStrength(name = "", detail = "") {
+        function addStrength(name = "") {
             const container = document.getElementById('strengths-container');
             const div = document.createElement('div'); div.className = 'dynamic-item str-item';
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
-                '<input type="text" class="st-name" placeholder="Strength" value="' + name + '" style="margin-bottom:5px;">' +
-                '<input type="text" class="st-detail" placeholder="Detail (Optional)" value="' + detail + '">';
+                '<input type="text" class="st-name" placeholder="Strength" value="' + name + '">';
             container.appendChild(div);
         }
         function addCert(name = "", detail = "") {
@@ -127,15 +169,15 @@
             const div = document.createElement('div'); div.className = 'dynamic-item exp-item';
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
                 '<div style="display:flex; gap: 10px;">' +
-                '<div style="flex:1;"><input type="text" class="e-start" placeholder="Start Date" value="' + start + '"></div>' +
-                '<div style="flex:1;"><input type="text" class="e-end" placeholder="End Date" value="' + end + '"></div>' +
+                '<div style="flex:1;"><small>Start Date</small><input type="date" class="e-start" required value="' + start + '" onchange="this.parentElement.nextElementSibling.querySelector(\'.e-end\').min = this.value"></div>' +
+                '<div style="flex:1;"><small>End Date</small><input type="date" class="e-end" required value="' + end + '"></div>' +
                 '</div>' +
                 '<div style="display:flex; gap: 10px; margin-top:10px;">' +
                 '<div style="flex:1;"><input type="text" class="e-title" placeholder="Job Title" value="' + title + '"></div>' +
                 '<div style="flex:1;"><input type="text" class="e-company" placeholder="Company" value="' + company + '"></div>' +
                 '<div style="flex:1;"><input type="text" class="e-loc" placeholder="Location" value="' + loc + '"></div>' +
                 '</div>' +
-                '<textarea class="e-resp" rows="3" placeholder="Responsibilities (One per line)" style="margin-top:10px;">' + resp + '</textarea>';
+                '<textarea class="e-resp" rows="4" placeholder="Responsibilities (one per line)" style="margin-top:10px;">' + resp + '</textarea>';
             container.appendChild(div);
         }
 
@@ -144,15 +186,15 @@
             const div = document.createElement('div'); div.className = 'dynamic-item intn-item';
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
                 '<div style="display:flex; gap: 10px;">' +
-                '<div style="flex:1;"><input type="text" class="in-start" placeholder="Start Date" value="' + start + '"></div>' +
-                '<div style="flex:1;"><input type="text" class="in-end" placeholder="End Date" value="' + end + '"></div>' +
+                '<div style="flex:1;"><small>Start Date</small><input type="date" class="in-start" required value="' + start + '" onchange="this.parentElement.nextElementSibling.querySelector(\'.in-end\').min = this.value"></div>' +
+                '<div style="flex:1;"><small>End Date</small><input type="date" class="in-end" required value="' + end + '"></div>' +
                 '</div>' +
                 '<div style="display:flex; gap: 10px; margin-top:10px;">' +
                 '<div style="flex:1;"><input type="text" class="in-title" placeholder="Intern Title" value="' + title + '"></div>' +
                 '<div style="flex:1;"><input type="text" class="in-company" placeholder="Company" value="' + company + '"></div>' +
                 '<div style="flex:1;"><input type="text" class="in-loc" placeholder="Location" value="' + loc + '"></div>' +
                 '</div>' +
-                '<textarea class="in-resp" rows="3" placeholder="Responsibilities (One per line)" style="margin-top:10px;">' + resp + '</textarea>';
+                '<textarea class="in-resp" rows="4" placeholder="Responsibilities (one per line)" style="margin-top:10px;">' + resp + '</textarea>';
             container.appendChild(div);
         }
 
@@ -173,40 +215,184 @@
         }
 
 
-        // IMAGE UPLOAD HANDLERS
-        document.getElementById('ProfilePicUpload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+        // ── IMAGE CROP MODAL ──────────────────────────────────────────────
+        (function() {
+            // Inject crop modal HTML
+            const modalHTML = `
+            <div id="crop-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center;">
+                <div style="background:#fff; border-radius:12px; padding:24px; max-width:520px; width:95%; box-shadow:0 8px 40px rgba(0,0,0,0.4);">
+                    <h3 style="margin:0 0 12px; font-size:1.1rem; color:#333;">Crop Profile Picture</h3>
+                    <p style="margin:0 0 12px; font-size:0.82rem; color:#666;">Drag to reposition &bull; Scroll or pinch to zoom</p>
+                    <div id="crop-viewport" style="position:relative; width:100%; height:320px; overflow:hidden; background:#111; border-radius:8px; cursor:grab; touch-action:none;">
+                        <img id="crop-img" style="position:absolute; transform-origin:top left; user-select:none; pointer-events:none;" draggable="false">
+                        <!-- square overlay -->
+                        <div style="position:absolute;inset:0;pointer-events:none;">
+                            <svg width="100%" height="100%">
+                                <defs>
+                                    <mask id="hole">
+                                        <rect width="100%" height="100%" fill="white"/>
+                                        <rect id="crop-square" x="calc(50% - 120px)" y="calc(50% - 120px)" width="240" height="240" fill="black"/>
+                                    </mask>
+                                </defs>
+                                <rect width="100%" height="100%" fill="rgba(0,0,0,0.55)" mask="url(#hole)"/>
+                                <!-- dashed square border -->
+                                <rect x="calc(50% - 120px)" y="calc(50% - 120px)" width="240" height="240" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="6 4"/>
+                                <!-- rule-of-thirds grid -->
+                                <line x1="calc(50% - 40px)" y1="calc(50% - 120px)" x2="calc(50% - 40px)" y2="calc(50% + 120px)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                                <line x1="calc(50% + 40px)" y1="calc(50% - 120px)" x2="calc(50% + 40px)" y2="calc(50% + 120px)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                                <line x1="calc(50% - 120px)" y1="calc(50% - 40px)" x2="calc(50% + 120px)" y2="calc(50% - 40px)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                                <line x1="calc(50% - 120px)" y1="calc(50% + 40px)" x2="calc(50% + 120px)" y2="calc(50% + 40px)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- zoom slider -->
+                    <div style="display:flex; align-items:center; gap:10px; margin-top:14px;">
+                        <span style="font-size:0.78rem;color:#555;">Zoom</span>
+                        <input type="range" id="crop-zoom" min="0.5" max="4" step="0.01" value="1" style="flex:1;">
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top:18px; justify-content:flex-end;">
+                        <button id="crop-cancel" type="button" style="padding:9px 20px; border:1px solid #ccc; border-radius:6px; background:#fff; cursor:pointer;">Cancel</button>
+                        <button id="crop-apply" type="button" style="padding:9px 24px; border:none; border-radius:6px; background:#0055a5; color:#fff; cursor:pointer; font-weight:600;">Apply</button>
+                    </div>
+                </div>
+            </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-            // Enforce a strict 2MB file size limit
-            const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
-            if (file.size > maxSizeInBytes) {
-                alert("File is too large! Please select an image under 2MB to ensure your resume saves correctly.");
-                this.value = ""; // Clear the file input so they try again
-                return;
+            const modal        = document.getElementById('crop-modal');
+            const cropImg      = document.getElementById('crop-img');
+            const viewport     = document.getElementById('crop-viewport');
+            const zoomSlider   = document.getElementById('crop-zoom');
+            const CROP_HALF     = 120; // half-side of the square crop area (px)
+
+            let scale = 1, offsetX = 0, offsetY = 0;
+            let isDragging = false, startX = 0, startY = 0, startOX = 0, startOY = 0;
+            let naturalW = 0, naturalH = 0, vpW = 0, vpH = 0;
+
+            function applyTransform() {
+                cropImg.style.transform = `translate(${offsetX}px,${offsetY}px) scale(${scale})`;
             }
 
-            const reader = new FileReader();
-            
-            reader.onload = function(event) {
-                const base64Image = event.target.result;
-                customProfilePic = base64Image;
-                document.getElementById('profile-preview').src = base64Image;
-                
-                // Safe save to localStorage
-                try {
-                    localStorage.setItem('user_profile_pic', base64Image);
-                } catch (error) {
-                    // Check if the error is a QuotaExceededError despite the 2MB limit
-                    if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-                        console.warn("Local storage quota exceeded.");
-                        alert("Storage limit reached. The image will appear on your resume right now, but won't be saved for your next session. Consider using a smaller image.");
-                    }
+            function clampOffset() {
+                const cropCX = vpW / 2;
+                const cropCY = vpH / 2;
+                const imgW = naturalW * scale;
+                const imgH = naturalH * scale;
+                // keep square area fully covered by the image
+                const maxX = cropCX - CROP_HALF;
+                const minX = cropCX + CROP_HALF - imgW;
+                const maxY = cropCY - CROP_HALF;
+                const minY = cropCY + CROP_HALF - imgH;
+                offsetX = Math.min(maxX, Math.max(minX, offsetX));
+                offsetY = Math.min(maxY, Math.max(minY, offsetY));
+            }
+
+            function openModal(src) {
+                cropImg.src = src;
+                cropImg.onload = () => {
+                    naturalW = cropImg.naturalWidth;
+                    naturalH = cropImg.naturalHeight;
+                    vpW = viewport.clientWidth;
+                    vpH = viewport.clientHeight;
+                    // fit image so it covers the square crop area
+                    const minScale = Math.max((2*CROP_HALF)/naturalW, (2*CROP_HALF)/naturalH);
+                    scale = minScale;
+                    zoomSlider.min = minScale;
+                    zoomSlider.value = scale;
+                    offsetX = (vpW - naturalW * scale) / 2;
+                    offsetY = (vpH - naturalH * scale) / 2;
+                    applyTransform();
+                };
+                modal.style.display = 'flex';
+            }
+
+            function cropAndApply() {
+                const canvas = document.createElement('canvas');
+                const side = CROP_HALF * 2;  // 240px square output
+                canvas.width = side;
+                canvas.height = side;
+                const ctx = canvas.getContext('2d');
+                // No clip — plain square output
+                const cropCX = vpW / 2;
+                const cropCY = vpH / 2;
+                const srcX = (cropCX - CROP_HALF - offsetX) / scale;
+                const srcY = (cropCY - CROP_HALF - offsetY) / scale;
+                const srcSize = (CROP_HALF * 2) / scale;
+                ctx.drawImage(cropImg, srcX, srcY, srcSize, srcSize, 0, 0, side, side);
+                const croppedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+                customProfilePic = croppedBase64;
+                document.getElementById('profile-preview').src = croppedBase64;
+                try { localStorage.setItem('user_profile_pic', croppedBase64); }
+                catch(e) { console.warn('localStorage quota:', e); }
+                modal.style.display = 'none';
+            }
+
+            // ── Drag ──
+            viewport.addEventListener('mousedown', e => {
+                isDragging = true; startX = e.clientX; startY = e.clientY;
+                startOX = offsetX; startOY = offsetY;
+                viewport.style.cursor = 'grabbing';
+            });
+            document.addEventListener('mousemove', e => {
+                if (!isDragging) return;
+                offsetX = startOX + (e.clientX - startX);
+                offsetY = startOY + (e.clientY - startY);
+                clampOffset();
+                applyTransform();
+            });
+            document.addEventListener('mouseup', () => { isDragging = false; viewport.style.cursor = 'grab'; });
+
+            // ── Touch drag ──
+            let lastTouchX = 0, lastTouchY = 0, lastDist = 0;
+            viewport.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                    lastTouchX = e.touches[0].clientX; lastTouchY = e.touches[0].clientY;
+                    startOX = offsetX; startOY = offsetY;
+                } else if (e.touches.length === 2) {
+                    lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                 }
-            };
-            
-            reader.readAsDataURL(file); 
-        });
+                e.preventDefault();
+            }, { passive: false });
+            viewport.addEventListener('touchmove', e => {
+                if (e.touches.length === 1) {
+                    offsetX = startOX + (e.touches[0].clientX - lastTouchX);
+                    offsetY = startOY + (e.touches[0].clientY - lastTouchY);
+                } else if (e.touches.length === 2) {
+                    const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                    scale = Math.min(4, Math.max(parseFloat(zoomSlider.min), scale * (dist / lastDist)));
+                    zoomSlider.value = scale;
+                    lastDist = dist;
+                }
+                clampOffset(); applyTransform(); e.preventDefault();
+            }, { passive: false });
+
+            // ── Scroll zoom ──
+            viewport.addEventListener('wheel', e => {
+                scale = Math.min(4, Math.max(parseFloat(zoomSlider.min), scale - e.deltaY * 0.001));
+                zoomSlider.value = scale;
+                clampOffset(); applyTransform(); e.preventDefault();
+            }, { passive: false });
+
+            // ── Slider zoom ──
+            zoomSlider.addEventListener('input', () => {
+                scale = parseFloat(zoomSlider.value);
+                clampOffset(); applyTransform();
+            });
+
+            // ── Buttons ──
+            document.getElementById('crop-apply').addEventListener('click', cropAndApply);
+            document.getElementById('crop-cancel').addEventListener('click', () => { modal.style.display = 'none'; });
+
+            // ── File input trigger ──
+            // IMAGE UPLOAD HANDLERS
+            document.getElementById('ProfilePicUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) { openModal(ev.target.result); };
+                reader.readAsDataURL(file);
+            });
+
+        })(); // end crop modal IIFE
 
         // PRE-FILL DATA OR LOAD SAVED DATA
         window.onload = function () {
@@ -224,18 +410,19 @@
                 
                 document.getElementById('FullName').value = savedData.FullName || "";
                 document.getElementById('ObjectiveStatement').value = savedData.ObjectiveStatement || "";
-                document.getElementById('Location').value = savedData.Location || "";
-                document.getElementById('PhoneNumber').value = savedData.PhoneNumber || "";
-                document.getElementById('EmailAddress').value = savedData.EmailAddress || "";
-                document.getElementById('LinkedInName').value = savedData.LinkedInDisplay_Name || "";
-                document.getElementById('LinkedInURL').value = savedData.LinkedInURL || "";
-                document.getElementById('DOB').value = savedData.DateOfBirth || "";
+                if(savedData.Location) document.getElementById('Location').value = savedData.Location;
+                if(savedData.PhoneNumber) document.getElementById('PhoneNumber').value = savedData.PhoneNumber;
+                if(savedData.EmailAddress) document.getElementById('EmailAddress').value = savedData.EmailAddress;
+                if(savedData.LinkedInName) document.getElementById('LinkedInName').value = savedData.LinkedInName;
+                if(savedData.LinkedInURL) document.getElementById('LinkedInURL').value = savedData.LinkedInURL;
+                if(savedData.ExtraLinkURL && document.getElementById('ExtraLinkURL')) document.getElementById('ExtraLinkURL').value = savedData.ExtraLinkURL;
+                if(savedData.DOB) document.getElementById('DOB').value = savedData.DOB;
                 document.getElementById('Languages').value = savedData.Languages_List || "";
 
                 // Load Dynamic Lists
                 if(savedData.TechnicalSkills) savedData.TechnicalSkills.forEach(i => addTechSkill(i.TechSkill_Name, i.TechSkill_Detail));
-                if(savedData.InterpersonalSkills) savedData.InterpersonalSkills.forEach(i => addInterSkill(i.InterpersonalSkill_Name));
-                if(savedData.Strengths) savedData.Strengths.forEach(i => addStrength(i.Strength_Name, i.Strength_Detail));
+                if(savedData.InterpersonalSkills) savedData.InterpersonalSkills.forEach(i => addInterSkill(i.InterpersonalSkill_Name, i.InterpersonalSkill_Detail || ""));
+                if(savedData.Strengths) savedData.Strengths.forEach(i => addStrength(i.Strength_Name));
                 if(savedData.Certifications) savedData.Certifications.forEach(i => addCert(i.Certification_Name, i.Certification_Detail));
                 if(savedData.Achievements) savedData.Achievements.forEach(i => addAchievement(i.Achievement_Detail));
                 if(savedData.Projects) savedData.Projects.forEach(i => addProject(i.Project_Name));
@@ -288,21 +475,21 @@
                 addInterSkill("Storytelling with data");
                 addInterSkill("Market Research");
 
-                addStrength("Critical Thinking", "");
-                addStrength("Analytical Thinking", "");
-                addStrength("Technologically Adept", "Technophile");
-                addStrength("Ideator", "");
+                addStrength("Critical Thinking");
+                addStrength("Analytical Thinking");
+                addStrength("Technologically Adept");
+                addStrength("Ideator");
 
                 addCert("Marketing Data Analysis", "Virtual Internship from YuvaIntern");
                 addCert("Data Analyst course", "Swayam Portal - ongoing");
                 addCert("Data ETL Workshop", "IIHMR University Jaipur");
                 addCert("Lean Six Sigma in Healthcare", "IIHMR University Jaipur");
 
-                addExperience("2025 MARCH", "2025 MAY", "Software Developer", "Atavata Business Pvt. Ltd", "Jaipur, RJ", "Developed a secure defense web application for the Indian Army under strict protocols.\nDelivered scalable solutions within tight timelines via cross-functional collaboration.");
-                addExperience("2024 APRIL", "2024 OCTOBER", "Business Development Executive", "Ogrelogic Solutions LLC", "Noida", "Achieved a 60% conversion rate by identifying business opportunities through market trend analysis.\nOptimised lead generation and stakeholder communication by managing digital campaigns and SEO.");
+                addExperience("2025-03-01", "2025-05-01", "Software Developer", "Atavata Business Pvt. Ltd", "Jaipur, RJ", "Developed a secure defense web application for the Indian Army under strict protocols.\nDelivered scalable solutions within tight timelines via cross-functional collaboration.");
+                addExperience("2024-04-01", "2024-10-01", "Business Development Executive", "Ogrelogic Solutions LLC", "Noida", "Achieved a 60% conversion rate by identifying business opportunities through market trend analysis.\nOptimised lead generation and stakeholder communication by managing digital campaigns and SEO.");
 
-                addInternship("2023 JULY", "2023 AUGUST", "Software Developer Intern", "InfoTechus Pvt. Ltd", "Noida", "Collaborated on web portal development and bug fixes.\nAssisted in API documentation.");
-                addInternship("2021 AUGUST", "2020 SEPTEMBER", "Embedded Engineer Intern", "NSIC", "Okhla, Delhi", "Conducted hardware testing and circuit validation.");
+                addInternship("2023-07-01", "2023-08-01", "Software Developer Intern", "InfoTechus Pvt. Ltd", "Noida", "Collaborated on web portal development and bug fixes.\nAssisted in API documentation.");
+                addInternship("2020-09-01", "2021-08-01", "Embedded Engineer Intern", "NSIC", "Okhla, Delhi", "Conducted hardware testing and circuit validation.");
 
                 addEducation("PG", "MBA", "IIHMR University, Jaipur", "Pursuing", "-");
                 addEducation("UG", "BTECH", "RKGIT, Ghaziabad", "2024", "68%");
@@ -324,6 +511,12 @@
 
         // RENDER LOGIC
         function generateResume() {
+            const form = document.getElementById('cvForm');
+            if (form && !form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
             const finalData = {
                 ProgrammeTitle: selectedProgrammeText,
                 FullName: document.getElementById('FullName').value,
@@ -333,6 +526,9 @@
                 EmailAddress: document.getElementById('EmailAddress').value,
                 LinkedInDisplay_Name: document.getElementById('LinkedInName').value,
                 LinkedInURL: document.getElementById('LinkedInURL').value,
+                ExtraLinkURL: document.getElementById('ExtraLinkURL') ? document.getElementById('ExtraLinkURL').value : "",
+                ExtraLinkLabelText: selectedProgrammeText === "SCHOOL OF DIGITAL HEALTH" ? "GitHub" : "Publications / Thesis",
+                IsGitHub: selectedProgrammeText === "SCHOOL OF DIGITAL HEALTH",
                 DateOfBirth: document.getElementById('DOB').value,
                 Languages_List: document.getElementById('Languages').value,
                 ProfilePictureURL: customProfilePic,
@@ -342,8 +538,8 @@
             };
 
             document.querySelectorAll('.tech-item').forEach(i => finalData.TechnicalSkills.push({ TechSkill_Name: i.querySelector('.t-name').value, TechSkill_Detail: i.querySelector('.t-detail').value }));
-            document.querySelectorAll('.int-item').forEach(i => finalData.InterpersonalSkills.push({ InterpersonalSkill_Name: i.querySelector('.i-name').value }));
-            document.querySelectorAll('.str-item').forEach(i => finalData.Strengths.push({ Strength_Name: i.querySelector('.st-name').value, Strength_Detail: i.querySelector('.st-detail').value }));
+            document.querySelectorAll('.int-item').forEach(i => finalData.InterpersonalSkills.push({ InterpersonalSkill_Name: i.querySelector('.i-name').value, InterpersonalSkill_Detail: i.querySelector('.i-detail').value }));
+            document.querySelectorAll('.str-item').forEach(i => finalData.Strengths.push({ Strength_Name: i.querySelector('.st-name').value }));
             document.querySelectorAll('.cert-item').forEach(i => finalData.Certifications.push({ Certification_Name: i.querySelector('.c-name').value, Certification_Detail: i.querySelector('.c-detail').value }));
             document.querySelectorAll('.ach-item').forEach(i => finalData.Achievements.push({ Achievement_Detail: i.querySelector('.a-detail').value }));
             document.querySelectorAll('.proj-item').forEach(i => finalData.Projects.push({ Project_Name: i.querySelector('.p-name').value }));
@@ -351,8 +547,15 @@
             document.querySelectorAll('.exp-item').forEach(item => {
                 const respText = item.querySelector('.e-resp').value;
                 const bulletsArray = respText.split('\n').filter(line => line.trim() !== '').map(line => ({ bullet: line }));
+                
+                const fmtDate = (ym) => {
+                    if (!ym || !ym.includes("-")) return ym;
+                    const [y, m] = ym.split('-');
+                    return new Date(y, m - 1).toLocaleString('default', { month: 'short', year: 'numeric' });
+                };
+
                 finalData.Experience.push({
-                    Exp_StartDate: item.querySelector('.e-start').value, Exp_EndDate: item.querySelector('.e-end').value,
+                    Exp_StartDate: fmtDate(item.querySelector('.e-start').value), Exp_EndDate: fmtDate(item.querySelector('.e-end').value),
                     Exp_JobTitle: item.querySelector('.e-title').value, Exp_CompanyName: item.querySelector('.e-company').value,
                     Exp_Location: item.querySelector('.e-loc').value, Exp_Responsibilities: bulletsArray
                 });
@@ -361,8 +564,15 @@
             document.querySelectorAll('.intn-item').forEach(i => {
                 const respText = i.querySelector('.in-resp').value;
                 const bulletsArray = respText.split('\n').filter(line => line.trim() !== '').map(line => ({ bullet: line }));
+                
+                const fmtDate = (ym) => {
+                    if (!ym || !ym.includes("-")) return ym;
+                    const [y, m] = ym.split('-');
+                    return new Date(y, m - 1).toLocaleString('default', { month: 'short', year: 'numeric' });
+                };
+
                 finalData.Internship.push({
-                    Int_StartDate: i.querySelector('.in-start').value, Int_EndDate: i.querySelector('.in-end').value,
+                    Int_StartDate: fmtDate(i.querySelector('.in-start').value), Int_EndDate: fmtDate(i.querySelector('.in-end').value),
                     Int_JobTitle: i.querySelector('.in-title').value, Int_CompanyName: i.querySelector('.in-company').value,
                     Int_Location: i.querySelector('.in-loc').value, Int_Responsibilities: bulletsArray
                 });
@@ -386,8 +596,58 @@
             finalData.hasAch = finalData.Achievements.length > 0;
             finalData.hasProj = finalData.Projects.length > 0;
 
+            function formatProperCase(str) {
+                if (typeof str !== 'string' || !str) return str;
+                return str.replace(/\w\S*/g, function(txt){
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            }
+            function formatSentenceCase(str) {
+                if (typeof str !== 'string' || !str) return str;
+                return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            }
+            function formatData(data, keyName = "") {
+                if (typeof data === 'string') {
+                    const sentenceKeys = [];
+                    const skipKeys = [
+                        // identity / URLs
+                        'ProfilePictureURL', 'LinkedInURL', 'ExtraLinkURL', 'ExtraLinkLabelText', 'EmailAddress',
+                        // dates
+                        'Exp_StartDate', 'Exp_EndDate', 'Int_StartDate', 'Int_EndDate',
+                        // education
+                        'Edu_Level', 'Edu_Degree', 'Edu_Institution', 'Edu_Year', 'Edu_Percentage',
+                        // preserved as-typed
+                        'ProgrammeTitle', 'Project_Name',
+                        // summary & achievements — preserve user casing exactly
+                        'ObjectiveStatement', 'Achievement_Detail',
+                        // bullet points (exp / internship)
+                        'bullet',
+                        // technical & interpersonal skills — preserve user casing exactly
+                        'TechSkill_Name', 'TechSkill_Detail', 'InterpersonalSkill_Name', 'InterpersonalSkill_Detail',
+                        // certifications
+                        'Certification_Name', 'Certification_Detail'
+                    ];
+                    if (skipKeys.includes(keyName)) return data;
+                    if (sentenceKeys.includes(keyName)) return formatSentenceCase(data);
+                    return formatProperCase(data);
+                }
+                if (Array.isArray(data)) {
+                    return data.map(item => formatData(item, keyName));
+                }
+                if (typeof data === 'object' && data !== null) {
+                    const newData = {};
+                    for (const key in data) {
+                        newData[key] = formatData(data[key], key);
+                    }
+                    return newData;
+                }
+                return data;
+            }
+
+            const formattedFinalData = formatData(finalData);
+
             const safeTemplateStr = document.getElementById('cvTemplateHtml').innerHTML;
-            const renderedHtml = Mustache.render(safeTemplateStr, finalData);
+            const renderedHtml = Mustache.render(safeTemplateStr, formattedFinalData);
 
             document.getElementById('render-target').innerHTML = renderedHtml;
             document.getElementById('form-view').style.display = 'none';
@@ -508,3 +768,5 @@
             cv.style.height = '296mm';
             cv.style.maxHeight = '296mm';
         }
+
+
