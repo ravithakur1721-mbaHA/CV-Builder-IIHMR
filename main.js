@@ -680,7 +680,7 @@
                 margin: 0,
                 filename: 'Resume.pdf',
                 image: { type: 'jpeg', quality: 1.0 },
-                html2canvas: { scale: 3, useCORS: true },
+                html2canvas: { scale: 5, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
