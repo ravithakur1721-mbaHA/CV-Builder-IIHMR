@@ -1023,7 +1023,7 @@ object-fit: cover;
         .profile-summary {
             font-size: calc(10pt * var(--text) * var(--fit) * var(--m-fit));
             margin-bottom: calc(10px * var(--space) * var(--fit) * var(--m-fit));
-            font-style: italic;
+            font-style: normal;
             color: #595959;
             line-height: 1.2;
             text-transform: none;
