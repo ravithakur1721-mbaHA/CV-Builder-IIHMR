@@ -167,6 +167,7 @@
         function addExperience(start = "", end = "", title = "", company = "", loc = "", resp = "") {
             const container = document.getElementById('experience-container');
             const div = document.createElement('div'); div.className = 'dynamic-item exp-item';
+            const uniqueId = 'editor-exp-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
                 '<div style="display:flex; gap: 10px;">' +
                 '<div style="flex:1;"><small>Start Date</small><input type="date" class="e-start" required value="' + start + '" onchange="this.parentElement.nextElementSibling.querySelector(\'.e-end\').min = this.value"></div>' +
@@ -177,13 +178,26 @@
                 '<div style="flex:1;"><input type="text" class="e-company" placeholder="Company" value="' + company + '"></div>' +
                 '<div style="flex:1;"><input type="text" class="e-loc" placeholder="Location" value="' + loc + '"></div>' +
                 '</div>' +
-                '<textarea class="e-resp" rows="4" placeholder="Responsibilities (one per line)" style="margin-top:10px;">' + resp + '</textarea>';
+                '<div style="margin-top:10px;">' +
+                '<div id="' + uniqueId + '" style="height: 120px; background:#fff;">' + resp + '</div>' +
+                '<input type="hidden" class="e-resp" value="">' +
+                '</div>';
             container.appendChild(div);
+            
+            const quill = new Quill('#' + uniqueId, {
+                theme: 'snow',
+                modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }] ] }
+            });
+            quill.on('text-change', function() {
+                div.querySelector('.e-resp').value = quill.root.innerHTML;
+            });
+            div.querySelector('.e-resp').value = quill.root.innerHTML;
         }
 
         function addInternship(start = "", end = "", title = "", company = "", loc = "", resp = "") {
             const container = document.getElementById('internship-container');
             const div = document.createElement('div'); div.className = 'dynamic-item intn-item';
+            const uniqueId = 'editor-intn-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
             div.innerHTML = '<button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>' +
                 '<div style="display:flex; gap: 10px;">' +
                 '<div style="flex:1;"><small>Start Date</small><input type="date" class="in-start" required value="' + start + '" onchange="this.parentElement.nextElementSibling.querySelector(\'.in-end\').min = this.value"></div>' +
@@ -194,8 +208,20 @@
                 '<div style="flex:1;"><input type="text" class="in-company" placeholder="Company" value="' + company + '"></div>' +
                 '<div style="flex:1;"><input type="text" class="in-loc" placeholder="Location" value="' + loc + '"></div>' +
                 '</div>' +
-                '<textarea class="in-resp" rows="4" placeholder="Responsibilities (one per line)" style="margin-top:10px;">' + resp + '</textarea>';
+                '<div style="margin-top:10px;">' +
+                '<div id="' + uniqueId + '" style="height: 120px; background:#fff;">' + resp + '</div>' +
+                '<input type="hidden" class="in-resp" value="">' +
+                '</div>';
             container.appendChild(div);
+
+            const quill = new Quill('#' + uniqueId, {
+                theme: 'snow',
+                modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }] ] }
+            });
+            quill.on('text-change', function() {
+                div.querySelector('.in-resp').value = quill.root.innerHTML;
+            });
+            div.querySelector('.in-resp').value = quill.root.innerHTML;
         }
 
         function addEducation(level = "", deg = "", inst = "", yr = "", pct = "") {
@@ -395,7 +421,19 @@
         })(); // end crop modal IIFE
 
         // PRE-FILL DATA OR LOAD SAVED DATA
+        // Global objective quill editor
+        let objectiveQuill;
+
         window.onload = function () {
+            // Initialize ObjectiveStatement editor
+            objectiveQuill = new Quill('#objective-editor', {
+                theme: 'snow',
+                modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }] ] }
+            });
+            objectiveQuill.on('text-change', function() {
+                document.getElementById('ObjectiveStatement').value = objectiveQuill.root.innerHTML;
+            });
+
             const savedImage = localStorage.getItem('user_profile_pic');
             if (savedImage) {
                 customProfilePic = savedImage;
@@ -409,7 +447,11 @@
                 const savedData = JSON.parse(savedDataString);
                 
                 document.getElementById('FullName').value = savedData.FullName || "";
-                document.getElementById('ObjectiveStatement').value = savedData.ObjectiveStatement || "";
+                
+                const objStr = savedData.ObjectiveStatement || "";
+                objectiveQuill.root.innerHTML = objStr;
+                document.getElementById('ObjectiveStatement').value = objStr;
+                
                 if(savedData.Location) document.getElementById('Location').value = savedData.Location;
                 if(savedData.PhoneNumber) document.getElementById('PhoneNumber').value = savedData.PhoneNumber;
                 if(savedData.EmailAddress) document.getElementById('EmailAddress').value = savedData.EmailAddress;
@@ -430,16 +472,26 @@
                 // Load Experience
                 if(savedData.Experience) {
                     savedData.Experience.forEach(i => {
-                        const resp = i.Exp_Responsibilities ? i.Exp_Responsibilities.map(r => r.bullet).join('\n') : "";
-                        addExperience(i.Exp_StartDate, i.Exp_EndDate, i.Exp_JobTitle, i.Exp_CompanyName, i.Exp_Location, resp);
+                        let respHTML = "";
+                        if (i.Exp_Responsibilities_HTML) {
+                            respHTML = i.Exp_Responsibilities_HTML;
+                        } else if (i.Exp_Responsibilities) {
+                            respHTML = "<ul>" + i.Exp_Responsibilities.map(r => "<li>" + r.bullet + "</li>").join("") + "</ul>";
+                        }
+                        addExperience(i.Exp_StartDate, i.Exp_EndDate, i.Exp_JobTitle, i.Exp_CompanyName, i.Exp_Location, respHTML);
                     });
                 }
 
                 // Load Internship
                 if(savedData.Internship) {
                     savedData.Internship.forEach(i => {
-                        const resp = i.Int_Responsibilities ? i.Int_Responsibilities.map(r => r.bullet).join('\n') : "";
-                        addInternship(i.Int_StartDate, i.Int_EndDate, i.Int_JobTitle, i.Int_CompanyName, i.Int_Location, resp);
+                        let respHTML = "";
+                        if (i.Int_Responsibilities_HTML) {
+                            respHTML = i.Int_Responsibilities_HTML;
+                        } else if (i.Int_Responsibilities) {
+                            respHTML = "<ul>" + i.Int_Responsibilities.map(r => "<li>" + r.bullet + "</li>").join("") + "</ul>";
+                        }
+                        addInternship(i.Int_StartDate, i.Int_EndDate, i.Int_JobTitle, i.Int_CompanyName, i.Int_Location, respHTML);
                     });
                 }
 
@@ -453,7 +505,11 @@
             } else {
                 // --- FRESH RUN: LOAD DEFAULT TEMPLATE DATA ---
                 document.getElementById('FullName').value = "Ravi Kumar Thakur";
-                document.getElementById('ObjectiveStatement').value = "Public Health Data Analyst with a strong foundation in HMIS, Healthcare Analytics, and Data Quality Improvement. Skilled in cleaning, validating, and analyzing large-scale health datasets to identify trends, detect inconsistencies, and enhance reporting accuracy.";
+                
+                const defObj = "Public Health Data Analyst with a strong foundation in HMIS, Healthcare Analytics, and Data Quality Improvement. Skilled in cleaning, validating, and analyzing large-scale health datasets to identify trends, detect inconsistencies, and enhance reporting accuracy.";
+                objectiveQuill.root.innerHTML = defObj;
+                document.getElementById('ObjectiveStatement').value = defObj;
+                
                 document.getElementById('Location').value = "New Delhi";
                 document.getElementById('PhoneNumber').value = "8595799852";
                 document.getElementById('EmailAddress').value = "ravi.ha02@iihmr.in";
@@ -485,11 +541,11 @@
                 addCert("Data ETL Workshop", "IIHMR University Jaipur");
                 addCert("Lean Six Sigma in Healthcare", "IIHMR University Jaipur");
 
-                addExperience("2025-03-01", "2025-05-01", "Software Developer", "Atavata Business Pvt. Ltd", "Jaipur, RJ", "Developed a secure defense web application for the Indian Army under strict protocols.\nDelivered scalable solutions within tight timelines via cross-functional collaboration.");
-                addExperience("2024-04-01", "2024-10-01", "Business Development Executive", "Ogrelogic Solutions LLC", "Noida", "Achieved a 60% conversion rate by identifying business opportunities through market trend analysis.\nOptimised lead generation and stakeholder communication by managing digital campaigns and SEO.");
+                addExperience("2025-03-01", "2025-05-01", "Software Developer", "Atavata Business Pvt. Ltd", "Jaipur, RJ", "<ul><li>Developed a secure defense web application for the Indian Army under strict protocols.</li><li>Delivered scalable solutions within tight timelines via cross-functional collaboration.</li></ul>");
+                addExperience("2024-04-01", "2024-10-01", "Business Development Executive", "Ogrelogic Solutions LLC", "Noida", "<ul><li>Achieved a 60% conversion rate by identifying business opportunities through market trend analysis.</li><li>Optimised lead generation and stakeholder communication by managing digital campaigns and SEO.</li></ul>");
 
-                addInternship("2023-07-01", "2023-08-01", "Software Developer Intern", "InfoTechus Pvt. Ltd", "Noida", "Collaborated on web portal development and bug fixes.\nAssisted in API documentation.");
-                addInternship("2020-09-01", "2021-08-01", "Embedded Engineer Intern", "NSIC", "Okhla, Delhi", "Conducted hardware testing and circuit validation.");
+                addInternship("2023-07-01", "2023-08-01", "Software Developer Intern", "InfoTechus Pvt. Ltd", "Noida", "<ul><li>Collaborated on web portal development and bug fixes.</li><li>Assisted in API documentation.</li></ul>");
+                addInternship("2020-09-01", "2021-08-01", "Embedded Engineer Intern", "NSIC", "Okhla, Delhi", "<ul><li>Conducted hardware testing and circuit validation.</li></ul>");
 
                 addEducation("PG", "MBA", "IIHMR University, Jaipur", "Pursuing", "-");
                 addEducation("UG", "BTECH", "RKGIT, Ghaziabad", "2024", "68%");
@@ -545,8 +601,7 @@
             document.querySelectorAll('.proj-item').forEach(i => finalData.Projects.push({ Project_Name: i.querySelector('.p-name').value }));
 
             document.querySelectorAll('.exp-item').forEach(item => {
-                const respText = item.querySelector('.e-resp').value;
-                const bulletsArray = respText.split('\n').filter(line => line.trim() !== '').map(line => ({ bullet: line }));
+                const respHTML = item.querySelector('.e-resp').value;
                 
                 const fmtDate = (ym) => {
                     if (!ym || !ym.includes("-")) return ym;
@@ -557,13 +612,12 @@
                 finalData.Experience.push({
                     Exp_StartDate: fmtDate(item.querySelector('.e-start').value), Exp_EndDate: fmtDate(item.querySelector('.e-end').value),
                     Exp_JobTitle: item.querySelector('.e-title').value, Exp_CompanyName: item.querySelector('.e-company').value,
-                    Exp_Location: item.querySelector('.e-loc').value, Exp_Responsibilities: bulletsArray
+                    Exp_Location: item.querySelector('.e-loc').value, Exp_Responsibilities_HTML: respHTML
                 });
             });
 
             document.querySelectorAll('.intn-item').forEach(i => {
-                const respText = i.querySelector('.in-resp').value;
-                const bulletsArray = respText.split('\n').filter(line => line.trim() !== '').map(line => ({ bullet: line }));
+                const respHTML = i.querySelector('.in-resp').value;
                 
                 const fmtDate = (ym) => {
                     if (!ym || !ym.includes("-")) return ym;
@@ -574,7 +628,7 @@
                 finalData.Internship.push({
                     Int_StartDate: fmtDate(i.querySelector('.in-start').value), Int_EndDate: fmtDate(i.querySelector('.in-end').value),
                     Int_JobTitle: i.querySelector('.in-title').value, Int_CompanyName: i.querySelector('.in-company').value,
-                    Int_Location: i.querySelector('.in-loc').value, Int_Responsibilities: bulletsArray
+                    Int_Location: i.querySelector('.in-loc').value, Int_Responsibilities_HTML: respHTML
                 });
             });
 
