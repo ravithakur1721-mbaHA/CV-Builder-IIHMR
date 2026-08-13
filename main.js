@@ -633,6 +633,14 @@
             adjustLayoutDensity();
         }
 
+        function clearFormData() {
+            if (confirm("Are you sure you want to clear all your saved data? This will reset the form completely and cannot be undone.")) {
+                localStorage.removeItem('saved_resume_data');
+                localStorage.removeItem('user_profile_pic');
+                window.location.reload();
+            }
+        }
+
         function editResume() {
             document.getElementById('cv-output').style.display = 'none';
             document.getElementById('form-view').style.display = 'block';
