@@ -503,65 +503,29 @@
                 }
 
             } else {
-                // --- FRESH RUN: LOAD DEFAULT TEMPLATE DATA ---
-                document.getElementById('FullName').value = "Ravi Kumar Thakur";
+                // --- FRESH RUN: LOAD EMPTY TEMPLATE ---
+                document.getElementById('FullName').value = "";
                 
-                const defObj = "Public Health Data Analyst with a strong foundation in HMIS, Healthcare Analytics, and Data Quality Improvement. Skilled in cleaning, validating, and analyzing large-scale health datasets to identify trends, detect inconsistencies, and enhance reporting accuracy.";
-                objectiveQuill.root.innerHTML = defObj;
-                document.getElementById('ObjectiveStatement').value = defObj;
+                objectiveQuill.root.innerHTML = "";
+                document.getElementById('ObjectiveStatement').value = "";
                 
-                document.getElementById('Location').value = "New Delhi";
-                document.getElementById('PhoneNumber').value = "8595799852";
-                document.getElementById('EmailAddress').value = "ravi.ha02@iihmr.in";
-                document.getElementById('LinkedInName').value = "Ravi Kr. Thakur";
-                document.getElementById('LinkedInURL').value = "https://www.linkedin.com/in/ravi-kumar-thakur-496003370/";
-                document.getElementById('DOB').value = "18/04/2002";
-                document.getElementById('Languages').value = "English and Hindi";
+                document.getElementById('Location').value = "";
+                document.getElementById('PhoneNumber').value = "";
+                document.getElementById('EmailAddress').value = "";
+                document.getElementById('LinkedInName').value = "";
+                document.getElementById('LinkedInURL').value = "";
+                document.getElementById('DOB').value = "";
+                document.getElementById('Languages').value = "";
 
-                addTechSkill("MS OFFICE SUITE", "");
-                addTechSkill("EXCEL", "Advanced");
-                addTechSkill("POWER BI", "Dashboard");
-                addTechSkill("DBMS", "SQL & MongoDB");
-                addTechSkill("PYTHON", "Fundamentals & Data Manipulation");
-
-                addInterSkill("Effective Communication");
-                addInterSkill("Presentions");
-                addInterSkill("Collaborative");
-                addInterSkill("Adaptive");
-                addInterSkill("Storytelling with data");
-                addInterSkill("Market Research");
-
-                addStrength("Critical Thinking");
-                addStrength("Analytical Thinking");
-                addStrength("Technologically Adept");
-                addStrength("Ideator");
-
-                addCert("Marketing Data Analysis", "Virtual Internship from YuvaIntern");
-                addCert("Data Analyst course", "Swayam Portal - ongoing");
-                addCert("Data ETL Workshop", "IIHMR University Jaipur");
-                addCert("Lean Six Sigma in Healthcare", "IIHMR University Jaipur");
-
-                addExperience("2025-03-01", "2025-05-01", "Software Developer", "Atavata Business Pvt. Ltd", "Jaipur, RJ", "<ul><li>Developed a secure defense web application for the Indian Army under strict protocols.</li><li>Delivered scalable solutions within tight timelines via cross-functional collaboration.</li></ul>");
-                addExperience("2024-04-01", "2024-10-01", "Business Development Executive", "Ogrelogic Solutions LLC", "Noida", "<ul><li>Achieved a 60% conversion rate by identifying business opportunities through market trend analysis.</li><li>Optimised lead generation and stakeholder communication by managing digital campaigns and SEO.</li></ul>");
-
-                addInternship("2023-07-01", "2023-08-01", "Software Developer Intern", "InfoTechus Pvt. Ltd", "Noida", "<ul><li>Collaborated on web portal development and bug fixes.</li><li>Assisted in API documentation.</li></ul>");
-                addInternship("2020-09-01", "2021-08-01", "Embedded Engineer Intern", "NSIC", "Okhla, Delhi", "<ul><li>Conducted hardware testing and circuit validation.</li></ul>");
-
-                addEducation("PG", "MBA", "IIHMR University, Jaipur", "Pursuing", "-");
-                addEducation("UG", "BTECH", "RKGIT, Ghaziabad", "2024", "68%");
-                addEducation("Diploma", "ECE", "PIT, Delhi", "2021", "90%");
-                addEducation("X", "CBSE", "Govt. Co-Ed Sr. Sec School, Delhi", "2018", "72%");
-
-                addAchievement("Achieved 1st Division in both B.Tech and Diploma.");
-                addAchievement("Elected Student Placement Coordinator (MBA 1st Year).");
-                addAchievement("Active member of the Operations Team, IIHMR Startups.");
-                addAchievement("Successful launch of a Summer Internship Open Learning Bootcamp.");
-
-                addProject("Hospital Management Information System (HMIS)");
-                addProject("Custom Dashboard for Tracing Student Placement Progress");
-                addProject("Ticket Wave (Online Ticketing Platform)");
-                addProject("Home Automation");
-                addProject("Automatic Irrigation System");
+                addTechSkill();
+                addInterSkill();
+                addStrength();
+                addCert();
+                addExperience();
+                addInternship();
+                addEducation();
+                addAchievement();
+                addProject();
             }
         };
 
