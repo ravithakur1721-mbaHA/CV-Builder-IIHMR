@@ -650,55 +650,7 @@
             finalData.hasAch = finalData.Achievements.length > 0;
             finalData.hasProj = finalData.Projects.length > 0;
 
-            function formatProperCase(str) {
-                if (typeof str !== 'string' || !str) return str;
-                return str.replace(/\w\S*/g, function(txt){
-                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                });
-            }
-            function formatSentenceCase(str) {
-                if (typeof str !== 'string' || !str) return str;
-                return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-            }
-            function formatData(data, keyName = "") {
-                if (typeof data === 'string') {
-                    const sentenceKeys = [];
-                    const skipKeys = [
-                        // identity / URLs
-                        'ProfilePictureURL', 'LinkedInURL', 'ExtraLinkURL', 'ExtraLinkLabelText', 'EmailAddress',
-                        // dates
-                        'Exp_StartDate', 'Exp_EndDate', 'Int_StartDate', 'Int_EndDate',
-                        // education
-                        'Edu_Level', 'Edu_Degree', 'Edu_Institution', 'Edu_Year', 'Edu_Percentage',
-                        // preserved as-typed
-                        'ProgrammeTitle', 'Project_Name',
-                        // summary & achievements — preserve user casing exactly
-                        'ObjectiveStatement', 'Achievement_Detail',
-                        // bullet points (exp / internship)
-                        'bullet',
-                        // technical & interpersonal skills — preserve user casing exactly
-                        'TechSkill_Name', 'TechSkill_Detail', 'InterpersonalSkill_Name', 'InterpersonalSkill_Detail',
-                        // certifications
-                        'Certification_Name', 'Certification_Detail'
-                    ];
-                    if (skipKeys.includes(keyName)) return data;
-                    if (sentenceKeys.includes(keyName)) return formatSentenceCase(data);
-                    return formatProperCase(data);
-                }
-                if (Array.isArray(data)) {
-                    return data.map(item => formatData(item, keyName));
-                }
-                if (typeof data === 'object' && data !== null) {
-                    const newData = {};
-                    for (const key in data) {
-                        newData[key] = formatData(data[key], key);
-                    }
-                    return newData;
-                }
-                return data;
-            }
-
-            const formattedFinalData = formatData(finalData);
+            const formattedFinalData = finalData;
 
             const safeTemplateStr = document.getElementById('cvTemplateHtml').innerHTML;
             const renderedHtml = Mustache.render(safeTemplateStr, formattedFinalData);
