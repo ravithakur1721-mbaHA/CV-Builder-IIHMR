@@ -1087,6 +1087,10 @@ object-fit: cover;
             margin-bottom: calc(20px * var(--space) * var(--fit) * var(--m-fit));
         }
 
+        .job-item:last-child {
+            margin-bottom: 0;
+        }
+
         .job-date {
             font-size: calc(9pt * var(--text) * var(--fit) * var(--m-fit));
             font-weight: bold;
@@ -1111,16 +1115,37 @@ object-fit: cover;
         }
 
         .job-bullets {
-            list-style-type: disc;
-            padding-left: 20px;
             font-size: calc(9pt * var(--text) * var(--fit) * var(--m-fit));
             color: #555555;
             margin: 0;
         }
+        
+        ul.job-bullets {
+            list-style-type: disc;
+            padding-left: calc(20px * var(--space) * var(--fit) * var(--m-fit));
+        }
+
+        div.job-bullets {
+            padding-left: 0;
+        }
+
+        div.job-bullets ul, div.job-bullets ol {
+            padding-left: calc(20px * var(--space) * var(--fit) * var(--m-fit));
+            margin: 0;
+        }
+
+        div.job-bullets p {
+            margin: 0 0 calc(4px * var(--space) * var(--fit) * var(--m-fit)) 0;
+        }
 
         .job-bullets li {
-            margin-bottom: 4px;
+            margin-bottom: calc(4px * var(--space) * var(--fit) * var(--m-fit));
             line-height: 1.15;
+            list-style-position: outside;
+        }
+        
+        div.job-bullets > *:last-child {
+            margin-bottom: 0;
         }
 
         .edu-table {
