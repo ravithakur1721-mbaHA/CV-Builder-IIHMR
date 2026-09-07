@@ -646,7 +646,7 @@
             document.getElementById('form-view').style.display = 'block';
         }
 
-        // PERFECT SINGLE-PAGE SCALING PDF GENERATION
+        // PERFECT SINGLE-PAGE SCALING PDF GENERATION WITH WORKING HYPERLINKS
         function downloadPDF() {
             const element = document.querySelector('.cv-container');
             const downloadBtn = document.getElementById('downloadBtn');
@@ -658,14 +658,75 @@
                 margin: 0,
                 filename: 'Resume.pdf',
                 image: { type: 'jpeg', quality: 1.0 },
-                html2canvas: { scale: 4, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas: { scale: 4, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                enableLinks: true
             };
 
-            html2pdf().set(options).from(element).save().then(() => {
-                downloadBtn.innerHTML = '🖨️ Download PDF';
-                downloadBtn.disabled = false;
-            });
+            // Collect all anchor elements with href before rendering
+            const anchors = Array.from(element.querySelectorAll('a[href]'));
+
+            html2pdf()
+                .set(options)
+                .from(element)
+                .toPdf()
+                .get('pdf')
+                .then(function (pdfObj) {
+                    // A4 dimensions in mm
+                    const pageWidthMm  = 210;
+                    const pageHeightMm = 297;
+
+                    // Get the rendered pixel dimensions of the element
+                    const elRect = element.getBoundingClientRect();
+                    const elWidthPx  = elRect.width;
+                    const elHeightPx = elRect.height;
+
+                    // Scale factors: pixels → mm
+                    const scaleX = pageWidthMm  / elWidthPx;
+                    const scaleY = pageHeightMm / elHeightPx;
+
+                    anchors.forEach(function (anchor) {
+                        const href = anchor.getAttribute('href');
+                        if (!href || href.startsWith('#')) return; // skip in-page anchors
+
+                        const rect = anchor.getBoundingClientRect();
+
+                        // Position relative to the cv-container
+                        const relTop    = rect.top  - elRect.top;
+                        const relLeft   = rect.left - elRect.left;
+                        const relBottom = rect.bottom - elRect.top;
+                        const relRight  = rect.right  - elRect.left;
+
+                        // Determine which PDF page this link falls on
+                        const pageNum   = Math.floor(relTop / elHeightPx) + 1;
+                        const pageOffset = (pageNum - 1) * elHeightPx;
+
+                        // Convert to mm, flipping Y because PDF origin is bottom-left
+                        const xMm      = relLeft   * scaleX;
+                        const yTopMm   = (relTop   - pageOffset) * scaleY;
+                        const widthMm  = (relRight  - relLeft)   * scaleX;
+                        const heightMm = (relBottom - relTop)    * scaleY;
+
+                        // jsPDF link API: addLink(x, y, w, h, url) — y is from top in 'mm' unit
+                        try {
+                            pdfObj.link(xMm, yTopMm, widthMm, heightMm, { url: href });
+                        } catch (e) {
+                            // fallback for older jsPDF versions
+                            try { pdfObj.textWithLink('', xMm, yTopMm, { url: href }); } catch (_) {}
+                        }
+                    });
+
+                    return pdfObj;
+                })
+                .save()
+                .then(() => {
+                    downloadBtn.innerHTML = '🖨️ Download PDF';
+                    downloadBtn.disabled = false;
+                })
+                .catch(() => {
+                    downloadBtn.innerHTML = '🖨️ Download PDF';
+                    downloadBtn.disabled = false;
+                });
         }
 
         function adjustLayoutDensity() {
