@@ -537,6 +537,14 @@
                 return;
             }
 
+            // Ensures a URL always has a protocol so it works as an href and in PDF
+            const ensureHttps = (url) => {
+                if (!url || url.trim() === '') return '';
+                const trimmed = url.trim();
+                if (/^https?:\/\//i.test(trimmed) || /^mailto:/i.test(trimmed)) return trimmed;
+                return 'https://' + trimmed;
+            };
+
             const finalData = {
                 ProgrammeTitle: selectedProgrammeText,
                 FullName: document.getElementById('FullName').value,
@@ -545,8 +553,8 @@
                 PhoneNumber: document.getElementById('PhoneNumber').value,
                 EmailAddress: document.getElementById('EmailAddress').value,
                 LinkedInDisplay_Name: document.getElementById('LinkedInName').value,
-                LinkedInURL: document.getElementById('LinkedInURL').value,
-                ExtraLinkURL: document.getElementById('ExtraLinkURL') ? document.getElementById('ExtraLinkURL').value : "",
+                LinkedInURL: ensureHttps(document.getElementById('LinkedInURL').value),
+                ExtraLinkURL: document.getElementById('ExtraLinkURL') ? ensureHttps(document.getElementById('ExtraLinkURL').value) : "",
                 ExtraLinkLabelText: selectedProgrammeText === "SCHOOL OF DIGITAL HEALTH" ? "GitHub" : "Publications / Thesis",
                 IsGitHub: selectedProgrammeText === "SCHOOL OF DIGITAL HEALTH",
                 DateOfBirth: document.getElementById('DOB').value,
