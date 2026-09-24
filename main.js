@@ -478,7 +478,10 @@
                         } else if (i.Exp_Responsibilities) {
                             respHTML = "<ul>" + i.Exp_Responsibilities.map(r => "<li>" + r.bullet + "</li>").join("") + "</ul>";
                         }
-                        addExperience(i.Exp_StartDate, i.Exp_EndDate, i.Exp_JobTitle, i.Exp_CompanyName, i.Exp_Location, respHTML);
+                        // Use raw YYYY-MM-DD dates for the form inputs; fall back to formatted string if raw not stored
+                        const expStart = i.Exp_StartDate_Raw || i.Exp_StartDate || "";
+                        const expEnd   = i.Exp_EndDate_Raw   || i.Exp_EndDate   || "";
+                        addExperience(expStart, expEnd, i.Exp_JobTitle, i.Exp_CompanyName, i.Exp_Location, respHTML);
                     });
                 }
 
@@ -491,7 +494,10 @@
                         } else if (i.Int_Responsibilities) {
                             respHTML = "<ul>" + i.Int_Responsibilities.map(r => "<li>" + r.bullet + "</li>").join("") + "</ul>";
                         }
-                        addInternship(i.Int_StartDate, i.Int_EndDate, i.Int_JobTitle, i.Int_CompanyName, i.Int_Location, respHTML);
+                        // Use raw YYYY-MM-DD dates for the form inputs; fall back to formatted string if raw not stored
+                        const intStart = i.Int_StartDate_Raw || i.Int_StartDate || "";
+                        const intEnd   = i.Int_EndDate_Raw   || i.Int_EndDate   || "";
+                        addInternship(intStart, intEnd, i.Int_JobTitle, i.Int_CompanyName, i.Int_Location, respHTML);
                     });
                 }
 
@@ -537,14 +543,6 @@
                 return;
             }
 
-            // Ensures a URL always has a protocol so it works as an href and in PDF
-            const ensureHttps = (url) => {
-                if (!url || url.trim() === '') return '';
-                const trimmed = url.trim();
-                if (/^https?:\/\//i.test(trimmed) || /^mailto:/i.test(trimmed)) return trimmed;
-                return 'https://' + trimmed;
-            };
-
             const finalData = {
                 ProgrammeTitle: selectedProgrammeText,
                 FullName: document.getElementById('FullName').value,
@@ -553,10 +551,11 @@
                 PhoneNumber: document.getElementById('PhoneNumber').value,
                 EmailAddress: document.getElementById('EmailAddress').value,
                 LinkedInDisplay_Name: document.getElementById('LinkedInName').value,
-                LinkedInURL: ensureHttps(document.getElementById('LinkedInURL').value),
-                ExtraLinkURL: document.getElementById('ExtraLinkURL') ? ensureHttps(document.getElementById('ExtraLinkURL').value) : "",
+                LinkedInURL: document.getElementById('LinkedInURL').value,
+                ExtraLinkURL: document.getElementById('ExtraLinkURL') ? document.getElementById('ExtraLinkURL').value : "",
                 ExtraLinkLabelText: selectedProgrammeText === "SCHOOL OF DIGITAL HEALTH" ? "GitHub" : "Publications / Thesis",
                 IsGitHub: selectedProgrammeText === "SCHOOL OF DIGITAL HEALTH",
+                DOB: document.getElementById('DOB').value,
                 DateOfBirth: document.getElementById('DOB').value,
                 Languages_List: document.getElementById('Languages').value,
                 ProfilePictureURL: customProfilePic,
@@ -572,17 +571,20 @@
             document.querySelectorAll('.ach-item').forEach(i => finalData.Achievements.push({ Achievement_Detail: i.querySelector('.a-detail').value }));
             document.querySelectorAll('.proj-item').forEach(i => finalData.Projects.push({ Project_Name: i.querySelector('.p-name').value }));
 
+            const fmtDate = (ym) => {
+                if (!ym || !ym.includes("-")) return ym;
+                const [y, m] = ym.split('-');
+                return new Date(y, m - 1).toLocaleString('default', { month: 'short', year: 'numeric' });
+            };
+
             document.querySelectorAll('.exp-item').forEach(item => {
                 const respHTML = item.querySelector('.e-resp').value;
-                
-                const fmtDate = (ym) => {
-                    if (!ym || !ym.includes("-")) return ym;
-                    const [y, m] = ym.split('-');
-                    return new Date(y, m - 1).toLocaleString('default', { month: 'short', year: 'numeric' });
-                };
+                const rawStart = item.querySelector('.e-start').value;
+                const rawEnd   = item.querySelector('.e-end').value;
 
                 finalData.Experience.push({
-                    Exp_StartDate: fmtDate(item.querySelector('.e-start').value), Exp_EndDate: fmtDate(item.querySelector('.e-end').value),
+                    Exp_StartDate: fmtDate(rawStart), Exp_EndDate: fmtDate(rawEnd),
+                    Exp_StartDate_Raw: rawStart, Exp_EndDate_Raw: rawEnd,
                     Exp_JobTitle: item.querySelector('.e-title').value, Exp_CompanyName: item.querySelector('.e-company').value,
                     Exp_Location: item.querySelector('.e-loc').value, Exp_Responsibilities_HTML: respHTML
                 });
@@ -590,15 +592,12 @@
 
             document.querySelectorAll('.intn-item').forEach(i => {
                 const respHTML = i.querySelector('.in-resp').value;
-                
-                const fmtDate = (ym) => {
-                    if (!ym || !ym.includes("-")) return ym;
-                    const [y, m] = ym.split('-');
-                    return new Date(y, m - 1).toLocaleString('default', { month: 'short', year: 'numeric' });
-                };
+                const rawStart = i.querySelector('.in-start').value;
+                const rawEnd   = i.querySelector('.in-end').value;
 
                 finalData.Internship.push({
-                    Int_StartDate: fmtDate(i.querySelector('.in-start').value), Int_EndDate: fmtDate(i.querySelector('.in-end').value),
+                    Int_StartDate: fmtDate(rawStart), Int_EndDate: fmtDate(rawEnd),
+                    Int_StartDate_Raw: rawStart, Int_EndDate_Raw: rawEnd,
                     Int_JobTitle: i.querySelector('.in-title').value, Int_CompanyName: i.querySelector('.in-company').value,
                     Int_Location: i.querySelector('.in-loc').value, Int_Responsibilities_HTML: respHTML
                 });
