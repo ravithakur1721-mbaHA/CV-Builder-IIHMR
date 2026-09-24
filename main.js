@@ -434,6 +434,22 @@
                 document.getElementById('ObjectiveStatement').value = objectiveQuill.root.innerHTML;
             });
 
+            // Auto-sync FullName → LinkedInName (mirrors until user manually edits LinkedInName)
+            let linkedInNameManuallyEdited = false;
+            const fullNameInput = document.getElementById('FullName');
+            const linkedInNameInput = document.getElementById('LinkedInName');
+
+            linkedInNameInput.addEventListener('input', function() {
+                // If user clears it back to empty, re-enable auto-sync
+                linkedInNameManuallyEdited = this.value.trim() !== '' && this.value !== fullNameInput.value;
+            });
+
+            fullNameInput.addEventListener('input', function() {
+                if (!linkedInNameManuallyEdited) {
+                    linkedInNameInput.value = this.value;
+                }
+            });
+
             const savedImage = localStorage.getItem('user_profile_pic');
             if (savedImage) {
                 customProfilePic = savedImage;
