@@ -550,6 +550,7 @@
                 Location: document.getElementById('Location').value,
                 PhoneNumber: document.getElementById('PhoneNumber').value,
                 EmailAddress: document.getElementById('EmailAddress').value,
+                LinkedInName: document.getElementById('LinkedInName').value,
                 LinkedInDisplay_Name: document.getElementById('LinkedInName').value,
                 LinkedInURL: document.getElementById('LinkedInURL').value,
                 ExtraLinkURL: document.getElementById('ExtraLinkURL') ? document.getElementById('ExtraLinkURL').value : "",
