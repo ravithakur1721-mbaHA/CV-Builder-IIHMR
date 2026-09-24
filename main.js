@@ -753,6 +753,79 @@
                 });
         }
 
+        function downloadWord() {
+            const wordBtn = document.getElementById('downloadWordBtn');
+            wordBtn.innerHTML = '⏳ Generating...';
+            wordBtn.disabled = true;
+
+            try {
+                const cvEl = document.querySelector('.cv-container');
+                if (!cvEl) throw new Error('CV element not found');
+
+                // Collect all stylesheet text accessible from the page
+                let cssText = '';
+                try {
+                    Array.from(document.styleSheets).forEach(function(sheet) {
+                        try {
+                            Array.from(sheet.cssRules || []).forEach(function(rule) {
+                                cssText += rule.cssText + '\n';
+                            });
+                        } catch(e) {}
+                    });
+                } catch(e) {}
+
+                // Get computed primary color for inline fallback
+                const primaryColor = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--primary-color').trim() || '#248BB4';
+
+                // Build a self-contained HTML document
+                const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  ${cssText}
+  .cv-container {
+    width: 210mm;
+    min-height: 296mm;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    --primary-color: ${primaryColor};
+    --fit: 1; --text: 1; --space: 1; --m-fit: 1;
+  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+</style>
+</head>
+<body>
+${cvEl.outerHTML}
+</body>
+</html>`;
+
+                if (typeof htmlDocx === 'undefined') {
+                    throw new Error('html-docx-js library not loaded');
+                }
+
+                const blob = htmlDocx.asBlob(htmlContent);
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement('a');
+                a.href     = url;
+                a.download = 'Resume.docx';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+            } catch(err) {
+                console.error('Word download failed:', err);
+                alert('Word download failed: ' + err.message + '\n\nTry using the PDF download instead.');
+            } finally {
+                wordBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2l2 5 2-5h2"/></svg> Download Word';
+                wordBtn.disabled = false;
+            }
+        }
+
         function adjustLayoutDensity() {
             const sliderVal = parseInt(document.getElementById('layoutSlider').value);
             const cv = document.querySelector('.cv-container');
