@@ -51,6 +51,14 @@
                 "--primary-accent": "#20b2aa",
                 "--primary-deep": "#006666",
                 "--banner-text": "#d9ebeb"
+            },
+            "default": {
+                "--primary-color": "#555555",
+                "--primary-dark": "#2d2d2d",
+                "--primary-light": "#f0f0f0",
+                "--primary-accent": "#777777",
+                "--primary-deep": "#444444",
+                "--banner-text": "#e0e0e0"
             }
         };
 
@@ -59,11 +67,15 @@
             "hhm": "INSTITUTE OF HEALTH MANAGEMENT RESEARCH",
             "pharma": "SCHOOL OF PHARMACEUTICAL MANAGEMENT",
             "dev": "SCHOOL OF DEVELOPMENT STUDIES",
-            "mph": "MASTER OF PUBLIC HEALTH"
+            "mph": "MASTER OF PUBLIC HEALTH",
+            "default": "DEFAULT CV"
         };
 
         // Global variable to hold the chosen text
         let selectedProgrammeText = "SCHOOL OF DIGITAL HEALTH";
+
+        // Flag: true when the user selected the Default CV (no institute banner)
+        let isDefaultCV = false;
 
         function selectProgramme(themeKey) {
             const selectedTheme = colorThemes[themeKey];
@@ -75,6 +87,9 @@
 
             // Save the selected programme text
             selectedProgrammeText = programmeTitles[themeKey];
+
+            // Track whether this is the Default CV (no banner)
+            isDefaultCV = (themeKey === 'default');
 
             if (themeKey === 'analytics') {
                 document.getElementById('ExtraLinkLabel').innerText = "GitHub Link";
@@ -640,7 +655,9 @@
 
             const formattedFinalData = finalData;
 
-            const safeTemplateStr = document.getElementById('cvTemplateHtml').innerHTML;
+            // Choose the right template: Default CV uses the no-banner variant
+            const templateId = isDefaultCV ? 'cvTemplateHtmlDefault' : 'cvTemplateHtml';
+            const safeTemplateStr = document.getElementById(templateId).innerHTML;
             const renderedHtml = Mustache.render(safeTemplateStr, formattedFinalData);
 
             document.getElementById('render-target').innerHTML = renderedHtml;
